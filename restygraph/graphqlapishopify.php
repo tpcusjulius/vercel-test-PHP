@@ -1,9 +1,16 @@
 <?php
 // Define las credenciales de tu tienda Shopify
-function grapQlShopify(string $query, string $url){
+function grapQlShopify(string $query, string $url, string $variable = ""){
     $shopifyDomain = 'dante-julius.myshopify.com';
     $accessToken = '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';
-
+    if(isset($variable)){
+      $bodyGraphql = '{
+        "query": '.$query.',
+        "variables": '.$variable.'
+      }';
+    }else{
+      $bodyGraphql = $query;
+    }
     // Define las opciones de la solicitud a la API de GraphQL
     $options = array(
       'http' => array(
@@ -12,7 +19,7 @@ function grapQlShopify(string $query, string $url){
           'X-Shopify-Access-Token: ' . $accessToken
         ),
         'method' => 'POST',
-        'content' => json_encode(array('query' => $query))
+        'content' => json_encode(array('query' => $bodyGraphql))
       )
     );
 
